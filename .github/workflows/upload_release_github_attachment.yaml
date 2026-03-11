@@ -50,7 +50,7 @@ jobs:
           tar -xzf /opt/teragrep/kaf_06.tgz -C /opt/teragrep/kaf_06 --strip-components=1;
 
       - name: Build rpm for release
-        run: mvn --batch-mode -Drevision=${{ github.event.release.tag_name }} -Dsha1= -Dchangelist= -f rpm.pom.xml package
+        run: mvn --batch-mode -Drevision=${{ github.event.release.tag_name }} -Dsha1= -Dchangelist= -f pom.xml package
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RPM_SIGNING_KEYNAME: ${{ env.RPM_SIGNING_KEYNAME }}
