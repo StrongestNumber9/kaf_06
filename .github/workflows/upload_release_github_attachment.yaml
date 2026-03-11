@@ -41,9 +41,9 @@ jobs:
 
       - name: Download, verify and prepare Kafka for packaging
         run: |
-          wget -q https://downloads.apache.org/kafka/KEYS -O /KEYS;
-          gpg2 --import KEYS;
           mkdir -p /opt/teragrep/kaf_06;
+          wget -q https://downloads.apache.org/kafka/KEYS -O /opt/teragrep//KEYS;
+          gpg2 --import /opt/teragrep/KEYS;
           wget -q https://archive.apache.org/dist/kafka/${KAFKA_VERSION}/kafka_${SCALA_VERSION}-${KAFKA_VERSION}.tgz -O /opt/teragrep/kaf_06.tgz;
           wget -q https://archive.apache.org/dist/kafka/${KAFKA_VERSION}/kafka_${SCALA_VERSION}-${KAFKA_VERSION}.tgz.asc -O /opt/teragrep/kaf_06.tgz.asc;
           gpg2 --verify /opt/teragrep/kaf_06.tgz.asc /opt/teragrep/kaf_06.tgz;
