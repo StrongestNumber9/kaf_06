@@ -71,6 +71,10 @@
           <defaultDirmode>755</defaultDirmode>
           <license>Apache License 2.0</license>
           <description>${project.groupId}-${project.artifactId} based on Kafka ${env.KAFKA_VERSION} using scala ${env.SCALA_VERSION}</description>
+          <keyname>${env.RPM_SIGNING_KEYNAME}</keyname>
+          <keyPassphrase>
+            <passphrase>${env.RPM_SIGNING_PASSPHRASE}</passphrase>
+          </keyPassphrase>
           <mappings>
             <!-- root but exclude all subdirs -->
             <mapping>
