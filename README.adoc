@@ -1,4 +1,4 @@
-= Teragrep repack for Apache Kafka
+= Teragrep repack of Apache Kafka
 
 Repackages Apache Kafka for Teragrep use
 
