@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.teragrep</groupId>
+  <version>${revision}${sha1}${changelist}</version>
+  <artifactId>kaf_06</artifactId>
+  <packaging>rpm</packaging>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <revision>0.0.1</revision>
+    <changelist>-SNAPSHOT</changelist>
+    <sha1/>
+  </properties>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <version>3.4.1</version>
+        <executions>
+          <execution>
+            <id>enforce</id>
+            <phase>none</phase>
+          </execution>
+          <execution>
+            <id>enforce-maven</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <requireMavenVersion>
+                  <version>3.5.4</version>
+                </requireMavenVersion>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+        <configuration>
+          <rules>
+            <requireJavaVersion>
+              <version>1.8</version>
+            </requireJavaVersion>
+          </rules>
+        </configuration>
+      </plugin>
+      <!-- rpm packaging -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>rpm-maven-plugin</artifactId>
+        <version>2.2.0</version>
+        <extensions>true</extensions>
+        <executions>
+          <execution>
+            <id>generate-rpm</id>
+            <goals>
+              <goal>rpm</goal>
+            </goals>
+            <phase>package</phase>
+          </execution>
+        </executions>
+        <configuration>
+          <summary>Teragrep repackage of ${project.artifactId}</summary>
+          <name>${project.groupId}-${project.artifactId}</name>
+          <version>${revision}${sha1}${changelist}</version>
+          <release>${env.BUILD_ID}</release>
+          <needarch>false</needarch>
+          <group>com.teragrep</group>
+          <defaultUsername>srv-kaf_07</defaultUsername>
+          <defaultGroupname>srv-kaf_07</defaultGroupname>
+          <defaultFilemode>644</defaultFilemode>
+          <defaultDirmode>755</defaultDirmode>
+          <license>Apache License 2.0</license>
+          <description>${project.groupId}-${project.artifactId} based on Kafka ${env.KAFKA_VERSION} using scala ${env.SCALA_VERSION}</description>
+          <keyname>${env.RPM_SIGNING_KEYNAME}</keyname>
+          <keyPassphrase>
+            <passphrase>${env.RPM_SIGNING_PASSPHRASE}</passphrase>
+          </keyPassphrase>
+          <mappings>
+            <!-- root but exclude all subdirs -->
+            <mapping>
+              <directory>/opt/teragrep/${project.artifactId}</directory>
+              <filemode>644</filemode>
+              <dirmode>755</dirmode>
+              <username>srv-kaf_07</username>
+              <groupname>srv-kaf_07</groupname>
+              <recurseDirectories>true</recurseDirectories>
+              <directoryIncluded>true</directoryIncluded>
+              <sources>
+                <source>
+                  <location>/opt/teragrep/${project.artifactId}</location>
+                  <includes>
+                    <include>LICENSE</include>
+                    <include>NOTICE</include>
+                  </includes>
+                </source>
+              </sources>
+            </mapping>
+            <!-- bin -->
+            <mapping>
+              <directory>/opt/teragrep/${project.artifactId}/bin</directory>
+              <filemode>755</filemode>
+              <dirmode>755</dirmode>
+              <username>srv-kaf_07</username>
+              <groupname>srv-kaf_07</groupname>
+              <recurseDirectories>true</recurseDirectories>
+              <directoryIncluded>true</directoryIncluded>
+              <sources>
+                <source>
+                  <location>/opt/teragrep/${project.artifactId}/bin</location>
+                </source>
+              </sources>
+            </mapping>
+            <!-- config -->
+            <mapping>
+              <directory>/opt/teragrep/${project.artifactId}/config</directory>
+              <filemode>644</filemode>
+              <dirmode>755</dirmode>
+              <username>srv-kaf_07</username>
+              <groupname>srv-kaf_07</groupname>
+              <configuration>noreplace</configuration>
+              <recurseDirectories>true</recurseDirectories>
+              <directoryIncluded>true</directoryIncluded>
+              <sources>
+                <source>
+                  <location>/opt/teragrep/${project.artifactId}/config</location>
+                </source>
+              </sources>
+            </mapping>
+            <!-- libs -->
+            <mapping>
+              <directory>/opt/teragrep/${project.artifactId}/libs</directory>
+              <filemode>755</filemode>
+              <dirmode>755</dirmode>
+              <username>srv-kaf_07</username>
+              <groupname>srv-kaf_07</groupname>
+              <recurseDirectories>true</recurseDirectories>
+              <directoryIncluded>true</directoryIncluded>
+              <sources>
+                <source>
+                  <location>/opt/teragrep/${project.artifactId}/libs</location>
+                </source>
+              </sources>
+            </mapping>
+            <!-- logs -->
+            <mapping>
+              <directory>/opt/teragrep/${project.artifactId}/logs</directory>
+              <filemode>644</filemode>
+              <dirmode>755</dirmode>
+              <username>srv-kaf_07</username>
+              <groupname>srv-kaf_07</groupname>
+            </mapping>
+          </mappings>
+          <provides>
+            <provide>${project.artifactId}</provide>
+          </provides>
+          <defineStatements>
+            <defineStatement>_build_id_links none</defineStatement>
+            <defineStatement>__provides_exclude ^.*\\.so.*$</defineStatement>
+            <defineStatement>__requires_exclude ^.*\\.so.*$</defineStatement>
+          </defineStatements>
+          <requires>
+            <require>java-1.8.0-openjdk-headless</require>
+          </requires>
+          <conflicts>
+            <conflict>com.teragrep-kaf_04 &lt; 7.0.0</conflict>
+            <conflict>com.teragrep-kaf_05 &lt; 7.0.0</conflict>
+          </conflicts>
+          <preinstallScriptlet>
+            <script>
+getent group srv-kaf_07 > /dev/null || groupadd -r srv-kaf_07;
+getent passwd srv-kaf_07 > /dev/null || useradd -r -g srv-kaf_07 -d /opt/teragrep/${project.artifactId} -s /sbin/nologin -c "Service User" srv-kaf_07;
+            </script>
+          </preinstallScriptlet>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
